@@ -16,7 +16,8 @@ end
 
 -- create a new database
 local db=sqlite.open(config.dbfile)
-
+-- create the actual folder
+lfs.mkdir(config.imgdir)
 
 -- execute a statement
 function tryexec(stat)
@@ -35,7 +36,7 @@ end
 tryexec [[
 CREATE TABLE tags (
 	id INTEGER PRIMARY KEY,
-	name VARCHAR(64) NOT NULL,
+	name VARCHAR(64) UNIQUE NOT NULL,
 	color CHAR(6) DEFAULT '555555',
 	nsfw INT(1) DEFAULT 0
 );]]
@@ -43,7 +44,7 @@ CREATE TABLE tags (
 tryexec [[
 CREATE TABLE formats (
 	id INTEGER PRIMARY KEY,
-	name VARCHAR(5)
+	name VARCHAR(5) UNIQUE NOT NULL
 );]]
 -- create 'images' table
 tryexec [[
