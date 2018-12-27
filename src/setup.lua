@@ -56,6 +56,15 @@ CREATE TABLE imagetag (
 	image INTEGER NOT NULL REFERENCES images(id),
 	tag INTEGER NOT NULL REFERENCES tags(id)
 );]]
+-- create 'fingerprints' table
+tryexec [[
+CREATE TABLE fingerprints (
+	image INTEGER NOT NULL REFERENCES images(id),
+	size INT(4) NOT NULL,
+	fingerprint BLOB NON NULL,
+
+	CONSTRAINT PK_fingerprint PRIMARY KEY(image, size)
+);]]
 
 -- do some tests
 tryexec [[
