@@ -1,5 +1,5 @@
 local config={}
 
-config.dbfile='/data/data/com.termux/files/home/imglib.sqlite'
+config.dbfile=os.getenv 'HOME'..'/imglib.sqlite'
 
 return config
