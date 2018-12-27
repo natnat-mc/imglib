@@ -86,8 +86,8 @@ tryexec [[
 INSERT INTO tags(name) VALUES('color');
 INSERT INTO tags(name, nsfw) VALUES('nsfw', 1);
 INSERT INTO TAGS(name, color) VALUES('red', 'ff0000');
-INSERT INTO images(name, height, width, format) VALUES('test', 600, 800, 'png');
-INSERT INTO images(name, height, width, format, nsfw) VALUES('nope', 123, 455, 'png', 1);
+INSERT INTO images(name, height, width, format) VALUES('test', 600, 800, 1);
+INSERT INTO images(name, height, width, format, nsfw) VALUES('nope', 123, 455, 2, 1);
 INSERT INTO imagetag(image, tag) VALUES(1, 1);
 INSERT INTO imagetag(image, tag) VALUES(2, 2);]]
 
