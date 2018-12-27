@@ -48,5 +48,27 @@ function util.tabselect(db, stat, names)
 	end
 	print()
 end
+-- dump a table select result
+function util.dumpresult(tab)
+	if #tab==0 and next(tab) then
+		return util.dumpresult {tab}
+	elseif #tab==0 then
+		print "(empty table)"
+	else
+		local names={}
+		for k in pairs(tab[1]) do
+			table.insert(names, k)
+		end
+		print(table.concat(names, '\t'))
+		for i, row in ipairs(tab) do
+			local vals={}
+			for k, name in ipairs(names) do
+				table.insert(vals, row[name])
+			end
+			print(table.concat(vals, '\t'))
+		end
+	end
+	print()
+end
 
 return util
