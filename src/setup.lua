@@ -39,15 +39,21 @@ CREATE TABLE tags (
 	color CHAR(6) DEFAULT '555555',
 	nsfw INT(1) DEFAULT 0
 );]]
+-- create 'formats' table
+tryexec [[
+CREATE TABLE formats (
+	id INTEGER PRIMARY KEY,
+	name VARCHAR(5)
+);]]
 -- create 'images' table
 tryexec [[
-	CREATE TABLE images (
+CREATE TABLE images (
 	id INTEGER PRIMARY KEY,
 	name STRING,
 	nsfw INT(1) DEFAULT 0,
 	height INTEGER NOT NULL,
 	width INTEGER NOT NULL,
-	format VARCHAR(5) NOT NULL,
+	format INTEGER NOT NULL REFERENCES formats(id),
 	adddate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );]]
 -- create 'imagetag' table
@@ -65,6 +71,14 @@ CREATE TABLE fingerprints (
 
 	CONSTRAINT PK_fingerprint PRIMARY KEY(image, size)
 );]]
+--create basic formats
+tryexec [[
+INSERT INTO formats(name) VALUES('png');
+INSERT INTO formats(name) VALUES('jpg');
+INSERT INTO formats(name) VALUES('gif');
+INSERT INTO formats(name) VALUES('bmp');
+INSERT INTO formats(name) VALUES('svg');
+INSERT INTO formats(name) VALUES('tiff');]]
 
 -- do some tests
 tryexec [[
@@ -83,6 +97,10 @@ SELECT id, name, color, nsfw FROM tags;
 util.tabselect(db, [[
 SELECT id, name, nsfw, height, width, format, adddate FROM images;
 ]], {'id', 'name', 'nsfw', 'height', 'width', 'format', 'adddate'})
+
+util.tabselect(db, [[
+SELECT id, name FROM formats;
+]], {'id', 'name'})
 
 util.tabselect(db, [[
 SELECT i.name AS image, t.name AS tag, i.nsfw AS nsfw
