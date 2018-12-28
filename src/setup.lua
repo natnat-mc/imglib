@@ -57,11 +57,34 @@ CREATE TABLE images (
 	format INTEGER NOT NULL REFERENCES formats(id),
 	adddate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );]]
+-- create 'albums' table
+tryexec [[
+CREATE TABLE albums (
+	id INTEGER PRIMARY KEY,
+	name STRING,
+	nsfw INT(1) DEFAULT 0
+);]]
 -- create 'imagetag' table
 tryexec [[
 CREATE TABLE imagetag (
 	image INTEGER NOT NULL REFERENCES images(id),
-	tag INTEGER NOT NULL REFERENCES tags(id)
+	tag INTEGER NOT NULL REFERENCES tags(id),
+	CONSTRAINT PK_imagetag PRIMARY KEY(image, tag)
+);]]
+-- create 'albumtag' table
+tryexec [[
+CREATE TABLE albumtag (
+	album INTEGER NOT NULL REFERENCES albums(id),
+	tag INTEGER NOT NULL REFERENCES tags(id),
+	CONSTRAINT PK_albumtag PRIMARY KEY(album, tag)
+);]]
+-- create 'albumimage' table
+tryexec [[
+CREATE TABLE albumimage (
+	album INTEGER NOT NULL REFERENCES albums(id),
+	image INTEGER NOT NULL REFERENCES images(id),
+	offset INTEGER NOT NULL,
+	CONSTRAINT PK_albumimage PRIMARY KEY(album, image)
 );]]
 -- create 'fingerprints' table
 tryexec [[
@@ -69,17 +92,20 @@ CREATE TABLE fingerprints (
 	image INTEGER NOT NULL REFERENCES images(id),
 	size INT(4) NOT NULL,
 	fingerprint BLOB NON NULL,
-
 	CONSTRAINT PK_fingerprint PRIMARY KEY(image, size)
 );]]
+-- enable foreign keys
+tryexec [[PRAGMA foreign_keys=ON;]]
 --create basic formats
 tryexec [[
-INSERT INTO formats(name) VALUES('png');
-INSERT INTO formats(name) VALUES('jpg');
-INSERT INTO formats(name) VALUES('gif');
-INSERT INTO formats(name) VALUES('bmp');
-INSERT INTO formats(name) VALUES('svg');
-INSERT INTO formats(name) VALUES('tiff');]]
+BEGIN TRANSACTION;
+	INSERT INTO formats(name) VALUES('png');
+	INSERT INTO formats(name) VALUES('jpg');
+	INSERT INTO formats(name) VALUES('gif');
+	INSERT INTO formats(name) VALUES('bmp');
+	INSERT INTO formats(name) VALUES('svg');
+	INSERT INTO formats(name) VALUES('tiff');
+COMMIT TRANSACTION;]]
 
 -- do some tests
 tryexec [[
