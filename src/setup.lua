@@ -107,34 +107,6 @@ BEGIN TRANSACTION;
 	INSERT INTO formats(name) VALUES('tiff');
 COMMIT TRANSACTION;]]
 
--- do some tests
-tryexec [[
-INSERT INTO tags(name) VALUES('color');
-INSERT INTO tags(name, nsfw) VALUES('nsfw', 1);
-INSERT INTO TAGS(name, color) VALUES('red', 'ff0000');
-INSERT INTO images(name, height, width, format) VALUES('test', 600, 800, 1);
-INSERT INTO images(name, height, width, format, nsfw) VALUES('nope', 123, 455, 2, 1);
-INSERT INTO imagetag(image, tag) VALUES(1, 1);
-INSERT INTO imagetag(image, tag) VALUES(2, 2);]]
-
-util.tabselect(db, [[
-SELECT id, name, color, nsfw FROM tags;
-]], {'id', 'name', 'color', 'nsfw'})
-
-util.tabselect(db, [[
-SELECT id, name, nsfw, height, width, format, adddate FROM images;
-]], {'id', 'name', 'nsfw', 'height', 'width', 'format', 'adddate'})
-
-util.tabselect(db, [[
-SELECT id, name FROM formats;
-]], {'id', 'name'})
-
-util.tabselect(db, [[
-SELECT i.name AS image, t.name AS tag, i.nsfw AS nsfw
-FROM images i, tags t, imagetag it
-WHERE i.id=it.image AND t.id=it.tag;
-]], {'image', 'tag', 'nsfw'})
-
 -- close the database
 db:close()
 
