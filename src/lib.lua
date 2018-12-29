@@ -61,21 +61,6 @@ local function getrows(stat, ...)
 	stat:reset()
 	return rows
 end
-local function insert(stat, ...)
-	if not stat then
-		error "No statement given"
-	end
-	local a=stat:bind_values(...)
-	if a~=0 then
-		error("Error while binding values: "..a)
-	end
-	a=stat:step()
-	stat:reset()
-	if a~=sqlite.DONE then
-		error("Error while executing statement: "..a)
-	end
-	return stat:last_insert_rowid()
-end
 local function run(stat, ...)
 	if not stat then
 		error "No statement given"
@@ -89,6 +74,10 @@ local function run(stat, ...)
 	if a~=sqlite.DONE then
 		error("Error while executing statement: "..a)
 	end
+end
+local function insert(stat, ...)
+	run(stat, ...)
+	return stat:last_insert_rowid()
 end
 
 -- function creation
@@ -120,7 +109,6 @@ local function create(fn, stat, args, nsfwstat)
 				for arg, val in pairs(args) do
 					list[argmap[arg]]=val
 				end
-				print(table.unpack(list, #argmap))
 				return fn(stat, table.unpack(list, 1, argc))
 			end)
 		else
