@@ -50,10 +50,10 @@ CREATE TABLE formats (
 tryexec [[
 CREATE TABLE images (
 	id INTEGER PRIMARY KEY,
-	name STRING,
+	name STRING UNIQUE,
 	nsfw INT(1) DEFAULT 0,
-	height INTEGER NOT NULL,
-	width INTEGER NOT NULL,
+	height INTEGER NOT NULL CHECK(height>0),
+	width INTEGER NOT NULL CHECK(width>0),
 	format INTEGER NOT NULL REFERENCES formats(id),
 	adddate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );]]
@@ -61,7 +61,7 @@ CREATE TABLE images (
 tryexec [[
 CREATE TABLE albums (
 	id INTEGER PRIMARY KEY,
-	name STRING,
+	name STRING UNIQUE,
 	nsfw INT(1) DEFAULT 0
 );]]
 -- create 'imagetag' table
@@ -83,7 +83,7 @@ tryexec [[
 CREATE TABLE albumimage (
 	album INTEGER NOT NULL REFERENCES albums(id),
 	image INTEGER NOT NULL REFERENCES images(id),
-	offset INTEGER NOT NULL,
+	offset INTEGER NOT NULL CHECK(offset>=1),
 	CONSTRAINT PK_albumimage PRIMARY KEY(album, image)
 );]]
 -- create 'fingerprints' table
@@ -91,7 +91,7 @@ tryexec [[
 CREATE TABLE fingerprints (
 	image INTEGER NOT NULL REFERENCES images(id),
 	size INT(4) NOT NULL,
-	fingerprint BLOB NON NULL,
+	fingerprint BLOB NOT NULL,
 	CONSTRAINT PK_fingerprint PRIMARY KEY(image, size)
 );]]
 -- enable foreign keys
