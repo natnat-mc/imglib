@@ -254,17 +254,13 @@ end
 -- library finalize
 function lib.finalize()
 	-- finalize and delete statements
-	local a={}
-	for k, s in pairs(stat) do
-		table.insert(a, k)
+	for k, s in pairs(lib.stat) do
 		s:finalize()
 	end
-	for i, v in ipairs(a) do
-		stat[v]=nil
-	end
+	lib.stat={}
 	-- close and delete database
-	db:close()
-	db=nil
+	lib.db:close()
+	lib.db=nil
 end
 
 -- get filename for ID and extension
