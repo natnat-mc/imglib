@@ -191,6 +191,14 @@ CREATE TEMP TABLE notags(
 		'removeyestag', -- remove a 'yes' tag from the combo
 		'addnotag', -- add a 'no' tag to the combo
 		'removenotag', -- remove a 'no' tag from the combo
+
+		-- fingerprint getters
+		'getfingerprints', -- all of them
+		'getfingerprintsforimage', -- for a specific image
+		'getmatchingfingerprints', -- match them against another
+		
+		-- fingerprint adders
+		'addfingerprint', -- create a fingerprint
 	}
 	for i, name in ipairs(preplist) do
 		local fd, err=io.open(config.sqldir..'/'..name..'.sql', 'r')
@@ -248,6 +256,14 @@ CREATE TEMP TABLE notags(
 		lib.getimagebyname=create(getrow, stat.getimagebyname, {'name'})
 		lib.getimagesfortag=create(getrows, stat.getimagesfortag, {'tag'}, stat.getallimagesfortag)
 		lib.getimagesforalbum=create(getrows, stat.getimagesforalbum, {'album'}, stat.getallimagesforalbum)
+
+		-- fingerprint getters
+		lib.getfingerprints=create(getrows, statgetfingerptints)
+		lib.getfingerprintsforimage=create(getrows, stat.getfingerprintsforimage, {'image'})
+		lig.getmatchingfingerprints=create(getrows, stat.getmatchingfingerprints, {'original', 'maxdelta', 'maxn'})
+		
+		-- fingerprint adders
+		lib.addfingerprint=create(insert, stat.addfingerprint, {'image', 'size', 'fingerprint'})
 	end
 end
 
