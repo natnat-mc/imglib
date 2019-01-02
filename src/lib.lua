@@ -260,7 +260,7 @@ CREATE TEMP TABLE notags(
 		-- fingerprint getters
 		lib.getfingerprints=create(getrows, statgetfingerptints)
 		lib.getfingerprintsforimage=create(getrows, stat.getfingerprintsforimage, {'image'})
-		lig.getmatchingfingerprints=create(getrows, stat.getmatchingfingerprints, {'original', 'maxdelta', 'maxn'})
+		lib.getmatchingfingerprints=create(getrows, stat.getmatchingfingerprints, {'original', 'maxdelta', 'maxn'})
 		
 		-- fingerprint adders
 		lib.addfingerprint=create(insert, stat.addfingerprint, {'image', 'size', 'fingerprint'})
