@@ -9,7 +9,7 @@ function M.delta(ctx, a, b)
 	end
 	local diff=0
 	for i=1, l do
-		local ba, bb=a:byte(i, i), b:byte(i, i)]
+		local ba, bb=a:byte(i, i), b:byte(i, i)
 		local ld=ba-bb
 		if ld<0 then
 			ld=-ld
@@ -22,7 +22,7 @@ func.delta=2
 
 -- install all custom functions
 function M.install(db)
-	for k, n in pairs(funcs) do
+	for k, n in pairs(func) do
 		if n<0 then
 			db:create_aggregate(k, -n, M[k]())
 		else

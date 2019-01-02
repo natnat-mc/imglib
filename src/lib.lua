@@ -7,18 +7,7 @@ local fs=require 'lfs'
 -- create the library
 local lib={}
 
--- internal functions
-local function prepare(sql)
-	local a, b=lib.db:prepare(sql)
-	if a then
-		return a
-	else
-		print 'In SQL'
-		print(sql)
-		print(b, lib.db:errmsg())
-		return nil
-	end
-end
+-- execute sql code
 local function exec(sql)
 	local a, b, c=util.tryexec(lib.db, sql)
 	if not a then
@@ -143,78 +132,11 @@ CREATE TEMP TABLE notags(
 	id INTEGER PRIMARY KEY
 );]]
 	
-	-- prepare all useful statements
-	local preplist={
-		-- format getters
-		'getformats', -- all of them
-		'getformatbyid', -- by id
-		'getformatbyname', -- by name
-		
-		-- format adders
-		'addformat', -- create a format
-		
-		-- tag getters
-		'gettags', 'getalltags', -- all of them
-		'gettagbyid', -- by id
-		'gettagbyname', -- by name
-		'gettagsforimage', -- for an image
-		'gettagsforalbum', -- for an album
-		
-		-- tag adder
-		'addtag', 'addnsfwtag', -- create a tag
-		'addtagtoimage', -- add a tag to an image
-		'addtagtoalbum', -- add a tag to an album
-		
-		-- album getters
-		'getalbums', 'getallalbums', -- all of them
-		'getalbumbyid', -- by id
-		'getalbumbyname', -- by name
-		'getalbumsfortag', 'getallalbumsfortag', -- for a tag
-		'getalbumsfortags', 'getallalbumsfortags', -- for a tag combo
-		'getalbumsforimage', 'getallalbumsforimage', -- for an image
-		
-		-- album adders
-		'addalbum', 'addnsfwalbum', -- create an album
-		'addimagetoalbum', -- add an image to an album
-		
-		-- image getters
-		'getimages', 'getallimages', -- all of them
-		'getimagebyid', -- by id
-		'getimagebyname', -- by name
-		'getimagesfortag', 'getallimagesfortag', -- for a tag
-		'getimagesfortags', 'getallimagesfortags', -- for a tag combo
-		'getimagesforalbum', 'getallimagesforalbum', -- for an album
-		
-		-- tag combo config
-		'cleantags', -- remove all tags from combos
-		'addyestag', -- add a 'yes' tag to the combo
-		'removeyestag', -- remove a 'yes' tag from the combo
-		'addnotag', -- add a 'no' tag to the combo
-		'removenotag', -- remove a 'no' tag from the combo
-
-		-- fingerprint getters
-		'getfingerprints', -- all of them
-		'getfingerprintsforimage', -- for a specific image
-		'getmatchingfingerprints', -- match them against another
-		
-		-- fingerprint adders
-		'addfingerprint', -- create a fingerprint
-	}
-	for i, name in ipairs(preplist) do
-		local fd, err=io.open(config.sqldir..'/'..name..'.sql', 'r')
-		if fd then
-			local sql=fd:read '*a'
-			local st=prepare(sql)
-			if st then
-				lib.stat[name]=st
-			else
-				print("Unable to load statement")
-			end
-			fd:close()
-		else
-			print("Unable to load SQL for "..name..": "..err)
-		end
-	end
+	-- create SQL functions
+	require 'sqlfuncs'.install(lib.db)
+	
+	-- prepare statements
+	lib.stat=require 'sqlstatements'.install(lib.db)
 	
 	-- create basic lib functions
 	do
@@ -258,7 +180,7 @@ CREATE TEMP TABLE notags(
 		lib.getimagesforalbum=create(getrows, stat.getimagesforalbum, {'album'}, stat.getallimagesforalbum)
 
 		-- fingerprint getters
-		lib.getfingerprints=create(getrows, statgetfingerptints)
+		lib.getfingerprints=create(getrows, stat.getfingerprints)
 		lib.getfingerprintsforimage=create(getrows, stat.getfingerprintsforimage, {'image'})
 		lib.getmatchingfingerprints=create(getrows, stat.getmatchingfingerprints, {'original', 'maxdelta', 'maxn'})
 		
