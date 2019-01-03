@@ -5,8 +5,38 @@ An image organization tool
 No
 
 ## How does it work?
-You feed it images, and tag them. It stores that in a database so that you can find all images that match a list of tags, use a blacklist or basically anything. 
-It stores everything it can about an image, like its size, format, add date and fingerprint. Fingerprinting allows for duplicate detection.
+
+### Images
+Images are stored with:
+- a serial ID (unique)
+- a format (in a list of allowed formats which can easily updated)
+- an optional name (unique)
+- a nsfw flag (defaults to no)
+- a size (height and width)
+- an add date (defaults to the time it is added)
+
+### Albums
+Albums are (more or less) ordered collections of images.  
+Albums are stored with:
+- a serial ID (unique)
+- a name (unique)
+- a nsfw flag (defaults to no)
+
+### Tags
+Tags may be applied to images and albums.  
+Tags are stored with:
+- a serial ID (unique)
+- a color
+- a name (unique)
+- a nsfw flag (defaults to no)
+
+## Fingerprints
+Fingerprints are scaled down images used to detect duplicates and near-duplicates faster than full library checks.  
+Fingerprints can and will take a lot of storage space, so it is an opt-in feature.  
+Fingerprints are stored with:
+- a corresponding image
+- a size
+- the actual fingerprint
 
 ## What's under the hood?
 This project uses
@@ -14,5 +44,5 @@ This project uses
 	- `lfs`
 	- `lsqlite3` or `lsqlite3complete`
 	- `luasocket` for daemon mode
-- Imagemagick withe `convert` in path
+- Imagemagick with the `convert` utility in the path
 
