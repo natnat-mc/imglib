@@ -13,5 +13,7 @@ This project uses
 - Lua >=5.3 with the following modules
 	- `lfs`
 	- `lsqlite3` or `lsqlite3complete`
-	- [`lua-imagick`](https://github.com/isage/lua-imagick)
+	- [`lua-imagick`](https://github.com/isage/lua-imagick) (if I get it to install with lua5.3 on all my machines) for fingerprinting
+		- `imagemagick` installed and in the path instead as a fallback
+	- `luasocket` for daemon mode
 
