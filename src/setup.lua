@@ -83,7 +83,7 @@ tryexec [[
 CREATE TABLE albumimage (
 	album INTEGER NOT NULL REFERENCES albums(id),
 	image INTEGER NOT NULL REFERENCES images(id),
-	offset INTEGER NOT NULL CHECK(offset>=1),
+	offset INTEGER NOT NULL,
 	CONSTRAINT PK_albumimage PRIMARY KEY(album, image)
 );]]
 -- create 'fingerprints' table

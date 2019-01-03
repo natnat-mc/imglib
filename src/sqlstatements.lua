@@ -59,6 +59,7 @@ local preplist={
 
 local M={}
 
+-- install all statements
 function M.install(db)
 	local S={}
 	for i, name in ipairs(preplist) do
@@ -78,6 +79,50 @@ function M.install(db)
 		S[name]=stat
 	end
 	return S
+end
+
+-- install statements for lazy loading
+function M.lazyinstall(db)
+	local S={}
+	local _={}
+	
+	-- reverse preplist for faster lookup
+	local rev={}
+	for i, v in ipairs(preplist) do
+		rev[v]=true
+	end
+	
+	-- dynamically load statements as they are used
+	function _:__index(name)
+		if not rev[name] then
+			error("Attempt to use nonexistent statement "..name)
+		end
+		
+		-- open statement file
+		local fd=io.open(config.sqldir..'/'..name..'.sql', 'r')
+		if not fd then
+			error("Couldn't load statement "..name)
+		end
+		
+		-- read statement code
+		local code=fd:read '*a'
+		if not code then
+			error("Couldn't read statement "..name)
+		end
+		fd:close()
+		
+		-- prepare statement
+		local stat=db:prepare(code)
+		if not stat then
+			error("Couldn't prepare statement "..name..":\n"..db:errmsg())
+		end
+		
+		-- add statement to the table and return it
+		rawset(self, name, stat)
+		return stat
+	end
+	
+	return setmetatable(S, _)
 end
 
 return M
