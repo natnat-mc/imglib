@@ -1,0 +1,11 @@
+UPDATE albums
+	<% if (changedescription and removedescription) or not (changedescription or removedescription or changename or changensfw) then %>
+		<% error("Invalid parameter combination") %>
+	<% else %>
+		SET
+			<% if changedescription then %>description=:description<% if changename or changensfw then %>,<% end %><% end %>
+			<% if removedescription then %>description=NULL<% if changename or changensfw then %>,<% end %><% end %>
+			<% if changename then %>name=:name<% if changensfw then %>,<% end %><% end %>
+			<% if changensfw then %>nsfw=:nsfw<% end %>
+	<% end %>
+	WHERE id=:id;

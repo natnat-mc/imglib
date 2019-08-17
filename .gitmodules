@@ -1,0 +1,9 @@
+[submodule "deps/jsonstream"]
+	path = deps/jsonstream
+	url = https://github.com/natnat-mc/lit-jsonstream.git
+[submodule "deps/lsqlite3"]
+	path = deps/lsqlite3
+	url = https://github.com/natnat-mc/lit-lsqlite3.git
+[submodule "deps/mooncake"]
+	path = deps/mooncake
+	url = https://github.com/cyrilis/luvit-mooncake.git

@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# get our basedir setup
+if [ -z "$BASEDIR" ]; then
+	BASEDIR="$HOME/.imglib"
+	export BASEDIR
+fi
+
+PID=`cat "$BASEDIR/lockfile"`
+echo "PID is $PID"
+if kill $PID 2>/dev/null; then
+	echo "Sent stop signal to server"
+	while [ -d /proc/$PID ]; do
+		echo -n .
+		sleep 1s
+	done
+	echo
+	echo "Server stopped"
+else
+	if ! [ -d /proc/$PID ]; then
+		echo "Server isn't running" 1>&2
+	else
+		echo "Couldn't stop server" 1>&2
+	fi
+fi

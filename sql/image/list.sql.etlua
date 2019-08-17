@@ -1,0 +1,82 @@
+SELECT i.id, i.name, i.nsfw, i.width, i.height, i.format AS fid, f.name AS fname, f.video AS fvideo, i.adddate, i.checksum
+	FROM images i
+	JOIN formats f ON i.format=f.id
+	WHERE
+		<% if name then %>(i.name=:name) AND<% end %>
+		<% if nsfw then %>(i.nsfw=:nsfw) AND<% end %>
+		<% if video then %>(f.video=:video) AND<% end %>
+		<% if q then %>(Q(:q, i.name) OR Q(:q, i.description)) AND<% end %>
+		<% if before and after then %>
+			(i.adddate BETWEEN :after and :before) AND
+		<% elseif before then %>
+			(i.adddate<=:before) AND
+		<% elseif after then %>
+			(i.adddate>=:after) AND
+		<% end %>
+		<% if yestags==true then %>
+			(
+				SELECT COUNT(*)
+					FROM yestags
+			)=(
+				SELECT COUNT(*)
+					FROM imagetag
+						WHERE image=i.id
+						AND tag IN (SELECT id FROM yestags)
+			) AND
+		<% elseif type(yestags)=='number' then %>
+			<% if yestags>100 then error "Too many inline yestags" end %>
+			(
+				SELECT COUNT(*)
+					FROM imagetag
+					WHERE image=i.id
+						AND tag IN (
+							<% for i=1, yestags do %>
+								<% if i~=1 then %>,<% end %>
+								:yestag<%= i %>
+							<% end %>
+						)
+			)=<%= yestags %> AND
+		<% end %>
+		<% if notags==true then %>
+			NOT EXISTS (
+				SELECT 1
+					FROM imagetag
+					WHERE image=i.id
+						AND tag IN (SELECT id FROM notags)
+			) AND
+		<% elseif type(notags)=='number' then %>
+			<% if notags>100 then error "Too many inline notags" end %>
+			NOT EXISTS (
+				SELECT 1
+					FROM imagetag
+					WHERE image=i.id
+						AND tag in (
+							<% for i=1, notags do %>
+								<% if i~=1 then %>,<% end %>
+								:notag<%= i %>
+							<% end %>
+						)
+			) AND
+		<% end %>
+		<% if anytags==true then %>
+			EXISTS (
+				SELECT 1
+					FROM imagetag
+					WHERE image=i.id
+						AND tag IN (SELECT id FROM anytags)
+			) AND
+		<% elseif type(anytags)=='number' then %>
+			<% if anytags>100 then error "Too many inline anytags" end %>
+			EXISTS (
+				SELECT 1
+					FROM imagetag
+					WHERE image=i.id
+						AND tag IN (
+							<% for i=1, anytags do %>
+								<% if i~=1 then %>,<% end %>
+								:anytag<%= i %>
+							<% end %>
+						)
+			) AND
+		<% end %>
+		1;

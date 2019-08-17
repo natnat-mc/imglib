@@ -1,0 +1,3 @@
+INSERT
+	INTO images(<% if name then %>name, <% end; if description then %>description, <% end %> nsfw, width, height, format, checksum, adddate)
+	VALUES(<% if name then %>:name, <% end; if description then %>:description, <% end %> :nsfw, :width, :height, :format, :checksum, :adddate);

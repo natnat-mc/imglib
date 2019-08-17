@@ -1,0 +1,3 @@
+INSERT
+	INTO albums(name <% if description then %>, description<% end %>, nsfw)
+	VALUES(:name <%if description then %>, :description<% end %>, :nsfw);

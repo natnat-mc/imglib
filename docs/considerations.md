@@ -1,0 +1,20 @@
+- Copy image & Copy link
+	- Only link on mobile
+- Share link must contain checksum
+	- Or be authenticated with API key
+- Always sort tags alphabetically
+	- Maybe also by NSFW
+- Search bar in menu
+	- Extended options
+	- Autocompletion of tags and albums
+	- Search by `name` or `q`
+- `q` uses multiple fields, depending on the data type, with a lua helper
+- API should use `PATCH` to update resources, `PUT` to create them and `DELETE` to delete them
+	- Subresources can't be edited, and only lists of ID's should be used to refer to them
+	- All values of a list must be supplied
+	- All values not supplied are left as-is
+	- Sanity checks are always executed
+	- No side-effects can occur
+	- ID's can not be modified
+- both `enctype` (for everything) and `encoding` should be set to `multipart/form-data` on the no-script upload page
+- [SauceNAO](https://saucenao.com/search.php) integration would be nice

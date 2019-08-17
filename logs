@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# get our basedir setup
+if [ -z "$BASEDIR" ]; then
+	BASEDIR="$HOME/.imglib"
+	export BASEDIR
+fi
+
+tail -f "$BASEDIR"/logfile

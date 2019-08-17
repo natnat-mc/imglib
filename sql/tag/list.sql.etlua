@@ -1,0 +1,24 @@
+SELECT id, name, color, nsfw, imagecount, albumcount
+	FROM tags
+	WHERE
+		<% if name then %>(name=:name) AND<% end %>
+		<% if color then %>(color=:color) AND<% end %>
+		<% if nsfw then %>(nsfw=:nsfw) AND<% end %>
+		<% if minimagecount and maximagecount then %>
+			(imagecount BETWEEN :minimagecount AND :maximagecount) AND
+		<% elseif maximagecount then %>
+			(imagecount<=:maximagecount) AND
+		<% elseif minimagecount then %>
+			(imagecount>=:minimagecount) AND
+		<% end %>
+		<% if minalbumcount and maxalbumcount then %>
+			(albumcount BETWEEN :minalbumcount AND :maxalbumcount) AND
+		<% elseif maxalbumcount then %>
+			(albumcount<=:maxalbumcount) AND
+		<% elseif minalbumcount then %>
+			(albumcount>=:minalbumcount) AND
+		<% end %>
+		<% if q then %>
+			(Q(:q, name) OR Q(:q, description)) AND
+		<% end %>
+		1;

@@ -1,0 +1,6 @@
+SELECT COUNT(1)
+	FROM formats
+	WHERE
+		<% if name then %>name=:name AND<% end %>
+		<% if id then %>id=:id AND<% end %>
+		1;

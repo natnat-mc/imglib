@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# get our basedir setup
+if [ -z "$BASEDIR" ]; then
+	BASEDIR="$HOME/.imglib"
+	export BASEDIR
+fi
+
+if [ ! -f "$BASEDIR/lockfile" ]; then
+	echo "Daemon is not running"
+elif [ -d /proc/`cat "$BASEDIR/lockfile"` ]; then
+	echo "Daemon is running with PID `cat "$BASEDIR/lockfile"`"
+else
+	echo "Daemon is not running"
+fi

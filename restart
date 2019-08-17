@@ -1,0 +1,37 @@
+#!/bin/sh
+
+# get our asses in here
+OURSELVES="`realpath "$0"`"
+cd "`dirname "$OURSELVES"`"
+
+# compile the code if we need to
+if ! make; then
+	printf "Error compiling application\n" >&2
+	exit 1
+fi
+
+# get our basedir setup
+if [ -z "$BASEDIR" ]; then
+	BASEDIR="$HOME/.imglib"
+	export BASEDIR
+fi
+
+# stop the server if it's running
+PID=`cat "$BASEDIR/lockfile"`
+if [ -d /proc/$PID ]; then
+	if kill $PID 2>/dev/null; then
+		echo "Sent stop signal to server"
+		while [ -d /proc/$PID ]; do
+			echo -n .
+			sleep 1s
+		done
+		echo
+		echo "Server stopped"
+	else
+		echo "Couldn't stop server" 1>&2
+	fi
+fi
+
+# start the daemmon
+echo "Starting daemon"
+exec daemonize/daemonize luvit . 0</dev/null 1>>"$BASEDIR/logfile" 2>&1

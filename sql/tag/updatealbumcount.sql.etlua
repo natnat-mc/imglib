@@ -1,0 +1,20 @@
+UPDATE tags
+	SET albumcount=
+		<% if mode=='auto' then %>
+			(
+				SELECT COUNT(*)
+					FROM albumtag
+					WHERE tag=id
+			)
+		<% elseif mode=='increment' then %>
+			albumcount+1
+		<% elseif mode=='decrement' then %>
+			albumcount-1
+		<% elseif mode=='set' then %>
+			:albumcount
+		<% else %>
+			<% error "Invalid update mode" %>
+		<% end %>
+	WHERE
+		<% if id then %>id=:id AND<% end %>
+		1;

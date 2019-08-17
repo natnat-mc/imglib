@@ -1,0 +1,20 @@
+UPDATE tags
+	SET imagecount=
+		<% if mode=='auto' then %>
+			(
+				SELECT COUNT(*)
+					FROM imagetag
+					WHERE tag=id
+			)
+		<% elseif mode=='increment' then %>
+			imagecount+1
+		<% elseif mode=='decrement' then %>
+			imagecount-1
+		<% elseif mode=='set' then %>
+			:imagecount
+		<% else %>
+			<% error "Invalid update mode" %>
+		<% end %>
+	WHERE
+		<% if id then %>id=:id AND<% end %>
+		1;

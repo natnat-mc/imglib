@@ -1,0 +1,11 @@
+UPDATE tags
+	<% if (changedescription and removedescription) or not (changedescription or changecolor or removedescription) then %>
+		<% error("Invalid parameter combination") %>
+	<% else %>
+		SET
+			<% if changedescription then %>description=:description<% if changecolor then %>,<% end %><% end %>
+			<% if removedescription then %>description=NULL<% if changecolor then %>,<% end %><% end %>
+			<% if changecolor then %>color=:color<% end %>
+	<% end %>
+	WHERE
+		id=:id;

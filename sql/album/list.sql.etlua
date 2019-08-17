@@ -1,0 +1,82 @@
+SELECT id, name, nsfw, imagecount
+	FROM albums
+	WHERE
+		<% if name then %>(name=:name) AND<% end %>
+		<% if nsfw then %>(nsfw=:nsfw) AND<% end %>
+		<% if minimagecount and maximagecount then %>
+			(imagecount BETWEEN :minimagecount AND :maximagecount) AND
+		<% elseif maximagecount then %>
+			(imagecount<=:maximagecount) AND
+		<% elseif minimagecount then %>
+			(imagecount>=:minimagecount) AND
+		<% end %>
+		<% if q then %>
+			(Q(:q, name) OR Q(:q, description)) AND
+		<% end %>
+		<% if yestags==true then %>
+			(
+				SELECT COUNT(*)
+					FROM yestags
+			)=(
+				SELECT COUNT(*)
+					FROM albumtag
+						WHERE album=id
+						AND tag IN (SELECT id FROM yestags)
+			) AND
+		<% elseif type(yestags)=='number' then %>
+			<% if yestags>100 then error "Too many inline yestags" end %>
+			(
+				SELECT COUNT(*)
+					FROM albumtag
+					WHERE album=id
+						AND tag IN (
+							<% for i=1, yestags do %>
+								<% if i~=1 then %>,<% end %>
+								:yestag<%= i %>
+							<% end %>
+						)
+			)=<%= yestags %> AND
+		<% end %>
+		<% if notags==true then %>
+			NOT EXISTS (
+				SELECT 1
+					FROM albumtag
+					WHERE album=id
+						AND tag IN (SELECT id FROM notags)
+			) AND
+		<% elseif type(notags)=='number' then %>
+			<% if notags>100 then error "Too many inline notags" end %>
+			NOT EXISTS (
+				SELECT 1
+					FROM albumtag
+					WHERE album=id
+						AND tag in (
+							<% for i=1, notags do %>
+								<% if i~=1 then %>,<% end %>
+								:notag<%= i %>
+							<% end %>
+						)
+			) AND
+		<% end %>
+		<% if anytags==true then %>
+			EXISTS (
+				SELECT 1
+					FROM albumtag
+					WHERE album=id
+						AND tag IN (SELECT id FROM anytags)
+			) AND
+		<% elseif type(anytags)=='number' then %>
+			<% if anytags>100 then error "Too many inline anytags" end %>
+			EXISTS (
+				SELECT 1
+					FROM albumtag
+					WHERE album=id
+						AND tag IN (
+							<% for i=1, anytags do %>
+								<% if i~=1 then %>,<% end %>
+								:anytag<%= i %>
+							<% end %>
+						)
+			) AND
+		<% end %>
+		1;

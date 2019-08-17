@@ -1,0 +1,6 @@
+SELECT COUNT(1)
+	FROM images
+	WHERE
+		<% if id then %>id=:id AND<% end %>
+		<% if checksum then %>checksum=:checksum AND<% end %>
+		1;

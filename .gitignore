@@ -1,0 +1,8 @@
+*.o
+*.a
+*.so
+api/*.lua
+app/*.lua
+db/*.lua
+libs/*.lua
+init.lua
