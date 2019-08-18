@@ -22,7 +22,7 @@ Tags can have their description and color altered, but their name and NSFW flag 
 A (more or less) [REST API](docs/api.md) is provided to programatically access and alter the database, as well as a web interface (provided in the webui module) and other clients (as separate apps).
 
 ## What does it use
-This tool is programmed using `luvit`, `mooncake`, `etlua`, `lsqlite3` and `moonscript`. It requires `imagemagick`, `ffmpeg` and `xxhash` to work.
+This tool is programmed using `luvit`, `mooncake`, `etlua`, `lsqlite3` and `moonscript`. It requires `imagemagick`, `ffmpeg`, `mimetype` (provided by `libfile-mimeinfo-perl`) and `xxhash` to work.
 
 ## How do I install it?
 - Make sure you're on Linux. Other POSIX platforms (BSD/Cygwin) should work but are not tested
