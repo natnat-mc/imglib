@@ -103,22 +103,3 @@ BEGIN TRANSACTION;
 	INSERT INTO formats(name, video) VALUES('mkv', 1);
 	INSERT INTO formats(name, video) VALUES('avi', 1);
 COMMIT TRANSACTION;
-
-BEGIN TRANSACTION;
-	INSERT INTO tags(name, nsfw) VALUES('meme', 0);
-	INSERT INTO tags(name, nsfw) VALUES('cute', 0);
-	INSERT INTO tags(name, description, nsfw) VALUES('anone anone', 'Cute li''l platelets', 0);
-	INSERT INTO tags(name, nsfw) VALUES('nani the fuck', 1);
-	
-	INSERT INTO albums(name, description, nsfw) VALUES('177013', 'Just... Don''t', 1);
-	INSERT INTO albums(name, nsfw) VALUES('anone anone', 0);
-	
-	INSERT INTO albumtag(album, tag) VALUES(2, 2);
-	INSERT INTO albumtag(album, tag) VALUES(2, 3);
-	
-	UPDATE tags
-		SET albumcount=(SELECT COUNT(album) FROM albumtag WHERE tag=id),
-			imagecount=(SELECT COUNT(image) FROM imagetag WHERE tag=id);
-	UPDATE albums
-		SET imagecount=(SELECT COUNT(image) FROM albumimage WHERE album=id);
-COMMIT TRANSACTION;
