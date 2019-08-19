@@ -17,7 +17,7 @@ if [ -z "$BASEDIR" ]; then
 fi
 
 # install the app if we need to
-if [ ! -d "$BASEDIR" ]; then
+if [ ! -f "$BASEDIR/config.json" ]; then
 	echo "Installing software"
 	if ! luvit -e "require './app/install'"; then
 		echo "Installation failed" 1>&2

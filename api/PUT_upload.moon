@@ -17,7 +17,7 @@ imagegetadddate=db.Statement.get 'image/getadddate'
 imageinfo=require '../libs/imageinfo'
 
 (req, res) ->
-	return unless authenticate req, res, {'write'}
+	return unless authenticate req, res, {'upload'}
 	-- `curl -X PUT --data-binary '@'<path> -H "Content-Type: image/png" <url>?<params>`
 	
 	-- adddate is now

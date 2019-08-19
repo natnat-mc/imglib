@@ -13,13 +13,14 @@
 	- A header called `API-Key`
 	- A cookie called `key`
 - An invalid or expired API Key will always result in an error, even on public endpoints
-- API Leys are subject to a permission system
+- API Keys are subject to a permission system
 	- `read` allows read permissions for the entire API
 	- `write` allows write permissions for the entire API, and includes `read`
 	- `upload` allows the use of the `PUT` and `POST` methods on the `/upload` endpoint
 	- `api` allows unrestricted access to the entire API
 - API Keys can be obtained through the `/login` endpoint
 - An API Key should be considered opaque
+- Authentication errors will return a result with ok=false, autherror=true, keyloc describing how the API key was passed (if available) and err describing the error
 
 ## API Endpoints
 ### `GET` `/version` [x]

@@ -28,7 +28,7 @@ This tool is programmed using `luvit`, `mooncake`, `etlua`, `lsqlite3` and `moon
 - Make sure you're on Linux. Other POSIX platforms (BSD/Cygwin) should work but are not tested
 - Install a C compiler, make and the lua5.1 headers
 - Clone this repo recursively `git clone --recursive https://github.com/natnat-mc/imglib`
-- Install [`luvit`](https://luvit.io/install.html) and [`luarocks`](https://luarocks.org)
+- Install [`luvit`](https://luvit.io/install.html) (you have to compile it yourself, the prebuit binaries don't work correctly for this) and [`luarocks`](https://luarocks.org)
 - Install `moonscript` (`luarocks install moonscript`)
 - Point the `BASEDIR` env variable where the files would be stored (this will be needed at each start)
 - Run `./run` to setup the files

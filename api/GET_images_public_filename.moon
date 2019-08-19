@@ -5,6 +5,8 @@ checkvalidimage=db.Statement.get 'image/checkvalid'
 formatgetmimetype=db.Statement.get 'format/getmimetype'
 
 (req, res) ->
+	return unless authenticate req, res, {}
+	
 	id, format=req.params.filename\match "^(%d+)%.(%S+)$"
 	checksum=req.query.checksum
 	

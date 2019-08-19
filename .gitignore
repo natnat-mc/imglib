@@ -6,3 +6,4 @@ app/*.lua
 db/*.lua
 libs/*.lua
 /init.lua
+/daemonize/daemonize

@@ -17,7 +17,7 @@ if [ -z "$BASEDIR" ]; then
 fi
 
 # install the app if we need to
-if [ ! -d "$BASEDIR" ]; then
+if [ ! -d "$BASEDIR/config.json" ]; then
 	echo "Installing software"
 	if ! luvit -e "require './app/install'"; then
 		echo "Installation failed" 1>&2
@@ -28,4 +28,6 @@ fi
 
 # start the daemon
 echo "Starting daemon"
+touch "$BASEDIR/logfile"
+chmod 600 "$BASEDIR/logfile"
 exec daemonize/daemonize luvit . 0</dev/null 1>>"$BASEDIR/logfile" 2>&1
