@@ -44,7 +44,8 @@ CREATE TABLE keys (
 	id INTEGER PRIMARY KEY,
 	name STRING UNIQUE NOT NULL,
 	expires TIMESTAMP,
-	permissions INTEGER NOT NULL
+	permissions INTEGER NOT NULL,
+	key BLOB NOT NULL
 );
 
 /******************************
