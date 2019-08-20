@@ -3,6 +3,5 @@
 require 'mooncake'
 
 -- patch stuff
-require './fs'
 require './mooncake'
 require './res'
