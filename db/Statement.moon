@@ -19,7 +19,7 @@ class Statement
 	new: (name) =>
 		@readypool={}
 		@code=fs.readFileSync "sql/#{name}.sql", 'utf8'
-		error "Couldn't read statement" unless @code
+		error "Couldn't read statement #{name}" unless @code
 		@_create!
 	
 	-- prepare a statement

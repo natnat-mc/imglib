@@ -2,7 +2,7 @@
 An image organization tool
 
 ## Is it ready yet?
-Mostly, the backend works, but not everything has been tested yet so crashes are still possible. Authentication and security aren't implemented yet. The frontend isn't ready yet.
+Mostly, the backend works, but not everything has been tested yet so crashes are still possible. The frontend isn't ready yet.
 
 ## How does it work?
 This tool organizes Images by allowing them to be flagged with Tags, and put in any number of Albums which can also be flagged with Tags.  

@@ -4,7 +4,7 @@
 - `boolean` in urlencoded and multipart/form-data means either `1/0`, `yes/no` or `true/false`
 - `CSV` in multipart/form-data means a list, with coma delimiters and double quotes for string values, double quotes in content are doubled
 
-***NOTICE: Only endpoints marked with [x] are currently implemented, and authentication is not a thing yet. This will likely change in the future.***
+***NOTICE: Only endpoints marked with [x] are currently implemented. This will likely change in the future.***
 
 ## Authentication
 - **Unless explicitly specified, al API calls must be authenticated**
@@ -39,35 +39,37 @@
 	- `err`: `string?`
 	- `res`: `Status?`
 
-### `POST` `/login`
+### `POST` `/login` [x]
 **Public**  
+**Encoding: `multipart/form-data`|`application/json`|`application/x-www-form-urlencoded`**  
 Logs in and allows API access, given that the password and parameters are valid.  
 Attempting to login with the same name as an existing API Key will revoke the corresponding key.
 
 - **Body**:
 	- `password`: `string`
 	- `name`: `string`
-	- `permissions`: `List<string>`
+	- `permissions`: `List<string>` (if urlencoded or json) `CSV<string>` (if form-data)
 	- `expires`: `int:timestamp?`
 - **Response**:
 	- `ok`: `boolean`
 	- `err`: `string?`
 	- `res`: `Key?`
 
-### `GET` `/keys`
+### `GET` `/keys` [x]
 - **Response**:
 	- `ok`: `boolean`
 	- `err`: `string?`
 	- `res`: `array[PartialKey]?`
 
-### `DELETE` `/keys/:id`
+### `DELETE` `/keys/:id` [x]
 - **Params**:
 	- `id`: `int`
 - **Response**:
 	- `ok`: `boolean`
 	- `err`: `string?`
 
-### `POST` `/changepassword`
+### `POST` `/changepassword` [x]
+**Encoding: `multipart/form-data`|`application/json`|`application/x-www-form-urlencoded`** 
 - **Body**:
 	- `oldpassword`: `string`
 	- `newpassword`: `string`
@@ -428,13 +430,13 @@ This endpoint is essentially a share link for an image, since it can't be guesse
 - `id`: `int`
 - `name`: `string`
 - `key`: `string:opaque`
-- `expires`: `int:timestamp`
+- `expires`: `int:timestamp?`
 - `permissions`: `array[string]`
 
 ### `PartialKey`
 - `id`: `int`
 - `name`: `string`
-- `expires`: `int:timestamp`
+- `expires`: `int:timestamp?`
 - `permissions`: `array[string]`
 
 ### `PrefetchInfo`

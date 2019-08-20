@@ -22,7 +22,7 @@
 		return n
 	if t=='int'
 		n=tonumber query
-		error "wrong format for int #{query}" unless n and query\match "^[0-9]+$"
+		error "wrong format for int #{query}" unless n and (tostring query)\match "^[0-9]+$"
 		return n
 	if t=='list'
 		return {query} if 'table'!=type query

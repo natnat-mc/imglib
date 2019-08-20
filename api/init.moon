@@ -2,6 +2,11 @@ routelist={
 	{'GET', '/version', './GET_version'}
 	{'GET', '/status', './GET_status'}
 	
+	{'POST', '/login', './POST_login'}
+	{'GET', '/keys', './GET_keys'}
+	{'DELETE', '/keys/:id', './DELETE_keys_id'}
+	{'POST', '/changepassword', './POST_changepassword'}
+	
 	{'GET', '/formats', './GET_formats'}
 	{'PUT', '/formats', './PUT_formats'}
 	{'GET', '/formats/:id', './GET_formats_id'}

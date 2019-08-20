@@ -16,7 +16,7 @@ class TemplatedStatement extends Statement
 	new: (name, params) =>
 		@readypool={}
 		@code=fs.readFileSync "sql/#{name}.sql.etlua", 'utf8'
-		error "Couldn't read statement" unless @code
+		error "Couldn't read statement #{name}" unless @code
 		ok, @code, err=pcall etlua.render, @code, params
 		error "Error rendering statement #{name}" unless ok
 		error "Couldn't apply statement parameters: #{err} to statement #{name}" unless @code
