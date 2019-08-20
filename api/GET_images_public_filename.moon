@@ -1,5 +1,6 @@
 config=require '../app/config'
 db=require '../db'
+authenticate=require './authenticate'
 
 checkvalidimage=db.Statement.get 'image/checkvalid'
 formatgetmimetype=db.Statement.get 'format/getmimetype'
