@@ -16,16 +16,6 @@ if [ -z "$BASEDIR" ]; then
 	export BASEDIR
 fi
 
-# install the app if we need to
-if [ ! -d "$BASEDIR/config.json" ]; then
-	echo "Installing software"
-	if ! luvit -e "require './app/install'"; then
-		echo "Installation failed" 1>&2
-		exit 1
-	fi
-	echo "Installed software"
-fi
-
 # start the daemon
 echo "Starting daemon"
 touch "$BASEDIR/logfile"

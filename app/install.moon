@@ -37,3 +37,6 @@ os.execute "chmod 600 #{path}"
 path=(require '../libs/escape') "#{os.getenv 'BASEDIR'}/images"
 os.execute "chmod 700 #{path}"
 print "Setup permissions"
+
+-- we're done here
+os.exit 0
