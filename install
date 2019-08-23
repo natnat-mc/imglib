@@ -1,0 +1,31 @@
+#!/bin/sh
+
+# get our asses in here
+OURSELVES="`realpath "$0"`"
+cd "`dirname "$OURSELVES"`"
+
+# compile the code if we need to
+if ! make; then
+	printf "Error compiling application\n" >&2
+	exit 1
+fi
+
+# get our basedir setup
+if [ -z "$BASEDIR" ]; then
+	BASEDIR="$HOME/.imglib"
+	export BASEDIR
+fi
+
+# alert the user if we're already installed
+if [ -f "$BASEDIR/config.json" ]; then
+	echo "Already installed in $BASEDIR. Exiting." 1>&2
+	exit 1
+fi
+
+# install the app if we need to
+echo "Installing software"
+if ! luvit -e "require './app/install'"; then
+	echo "Installation failed" 1>&2
+	exit 1
+fi
+echo "Installed software"

@@ -23,7 +23,10 @@ print "Created config"
 
 -- setup database
 sqlite3=require 'lsqlite3'
-db=sqlite3.open "#{os.getenv 'BASEDIR'}/imgdb.sqlite", sqlite3.OPEN_READWRITE+sqlite3.OPEN_CREATE
+db, errc, err=sqlite3.open "#{os.getenv 'BASEDIR'}/imgdb.sqlite", sqlite3.OPEN_READWRITE+sqlite3.OPEN_CREATE
+unless db
+	print "Error #{errc}: #{err}"
+	os.exit 1
 if sqlite3.OK!=db\exec fs.readFileSync './sql/--up--.sql', 'utf8'
 	error "Couldn't initialize database"
 	db\close!
