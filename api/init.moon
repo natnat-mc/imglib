@@ -58,7 +58,24 @@ applyparamsimp=(params, paramlist, ...) ->
 -- apply the parameters to a req object
 applyparams=(regexp, url, paramlist) -> applyparamsimp {}, paramlist, url\match regexp
 
-(req, res, next) ->
+(req, res, next, a) ->
+	if 'string'==type req -- alternate operation: edit routes
+		if 'add'==req -- add a route
+			method, path, handler=res, next, a
+			route={
+				regexp: "^"..(path\gsub ":[^/]+", '([^/]+)').."/?$" -- convert :stuff to a regexp
+				method: method\upper!
+				handler: handler
+				params: {}
+			}
+			path\gsub ":([^/]+)", (param) -> table.insert route.params, param -- re-add the params
+			route.params=nil if #route.params==0 -- remove them again if they don't exist
+			table.insert(routes, route)
+		return
+	
+	-- make sure we should handle this
+	return next! unless '/api'==req.url\sub 1, #'/api' 
+	
 	-- fetch data from the req object
 	method=req.method\upper!
 	url=(req.url\sub 1+#'/api')\gsub "%?.+$", ''

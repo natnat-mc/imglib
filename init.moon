@@ -23,6 +23,20 @@ do
 do
 	app\use require './api'
 
+-- load modules
+do
+	modloader=require './app/modloader'
+	modloader.objects.mcserver=app
+	modloader.objects.db=require './db'
+	modloader.objects.native=require './native'
+	modloader.objects.api=require './api'
+	modloader.objects.auth=require './api/auth'
+	modloader.objects.authenticate=require './api/authenticate'
+	modloader.objects.getquery=require './api/getquery'
+	modloader.objects.require=require
+	modloader.updateobjects!
+	modloader.loadmodules!
+
 -- start web server
 do
 	config=require './app/config'
