@@ -20,7 +20,12 @@ modulepublic.addapi=(method, path, handler) ->
 	objects.api method, path, handler
 
 modulepublic.addrouter=(path, handler) ->
-	objects.mcserver.all path, handler
+	objects.mcserver\use (req, res, next) ->
+		return next! if path!=req.url\sub 1, #path
+		realurl, req.url=req.url, req.url\sub (path=='/' and 1 or #path)
+		return handler req, res, () ->
+			req.url=realurl
+			next!
 
 updateobjects=() ->
 	modulepublic.db=objects.db
